@@ -19,8 +19,8 @@ namespace ListaSessji01
         // Inicjalizacja Loggera
         //private static Logger logger = LogManager.GetCurrentClassLogger();
         // Klucz i wektor inicjalizacyjny do szyfrowania AES
-        private static readonly byte[] Key = Encoding.UTF8.GetBytes("12345678901234567890123456789012");
-        private static readonly byte[] IV = Encoding.UTF8.GetBytes("1234567890123456");
+        private static readonly byte[] Key = Encoding.UTF8.GetBytes("your-key");
+        private static readonly byte[] IV = Encoding.UTF8.GetBytes("your-key");
         // Konstruktor inicjalizuje komponenty okna i ładuje konfigurację z pliku
         public LoginWindow()
         {
@@ -143,7 +143,7 @@ namespace ListaSessji01
             foreach (var port in ports)
             {
                 // Tworzy URL do zalogowania
-                string restURL = $"http://{hostname}:{port}/datasnap/rest/";
+                string restURL = $"http://{hostname}:{port}/connect/rest/";
                 //logger.Trace($"restURL: {restURL}");
                 var rClient = new RClient(restURL, login, password);
                 // Weryfikuje poprawność logowania
