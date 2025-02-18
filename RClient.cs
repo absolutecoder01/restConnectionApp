@@ -7,10 +7,10 @@ public class RClient
 {
     private RestClient client;
     private string pragma;
-    private static string pathGetConnectionList = "TstAdminModule/GetConnectionsList";
-    private static string pathGetCurrentSession = "TstAdminModule/GetCurrentSession";
-    private static string pathCloseSession = "TstAdminModule/CloseSession";
-    private static string pathPingRest = "TstBaseMethods/Ping/";
+    private static string pathGetConnectionList = "/GetConnectionsList";
+    private static string pathGetCurrentSession = "/GetCurrentSession";
+    private static string pathCloseSession = "/CloseSession";
+    private static string pathPingRest = "/Ping/";
 
     public RClient(string restURL, string login, string passw)
     {
