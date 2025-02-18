@@ -23,8 +23,18 @@ App to connect to the server and display sessions and manage them.
 
 # Main window
 
+<ul>
+  <li>Displaying every port as new tab</li>
+  <li>All json data is parsed and displayed according to id's</li>
+  <li>Every session has a end session button (I think you undestand for what)</li>
+  <li>To avoid closing session that is used to show other sessions in the window, the end session button is hidden</li>
+</ul>
+
+<br/>
 <div align="center" >
 
-![main_okno](https://github.com/user-attachments/assets/70107d57-7839-402c-b65b-6d1475351530)
+
+![main_window](https://github.com/user-attachments/assets/765b7511-383d-4c92-910c-63d8381b27f8)
+
 
 </div>
