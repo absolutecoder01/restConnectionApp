@@ -19,7 +19,7 @@ namespace ListaSessji01
         private DispatcherTimer _timer;
         private Dictionary<string, string> _currentSessionIDs = new Dictionary<string, string>();
         private Dictionary<string, string> _selectedSessionIDs = new Dictionary<string, string>();
-
+        
         public MainWindow(Dictionary<string, string> sessionData, Dictionary<string, RClient> rClients, string refreshTime)
         {
             InitializeComponent();
@@ -55,6 +55,7 @@ namespace ListaSessji01
                     if (currentSessionData != null && currentSessionData.ContainsKey("result") && currentSessionData["result"].Count > 0)
                     {
                         _currentSessionIDs[port] = currentSessionData["result"].FirstOrDefault();
+
                     }
                 }
             }
@@ -136,25 +137,6 @@ namespace ListaSessji01
             }
             return sessionIDs;
         }
-        //private void HideEndSessionButton(string sessionId)
-        //{
-        //    if (_currentSessionIDs.Values.Contains(sessionId))
-        //    {
-        //        // Assume endSessionButton is the Button control you want to hide
-        //        endSessionButton.Visible = false;
-
-
-        //    }
-        //}
-        private string ProcessJson(string json)
-        {
-            // Replace unquoted session IDs with quoted ones
-            return System.Text.RegularExpressions.Regex.Replace(json, @"(\d+\.\d+\.\d+)", "\"$1\"");
-        }
-
-
-
-
 
         private bool IsValidJson(string json)
         {
@@ -267,9 +249,6 @@ namespace ListaSessji01
             public bool IsCurrentSession { get; set; }
         }
 
-
-
-
         private void ParseAndDisplayData(string json, string port)
         {
             try
@@ -286,35 +265,32 @@ namespace ListaSessji01
             }
         }
 
-
         private void DisplaySessionsAsTabs(List<Session> sessions, string port)
         {
             try
-            {
-                // Problem tkwi tutaj
-                logger.Info("Current session IDs: " + string.Join(", ", _currentSessionIDs.Values));
 
+            {
                 foreach (var session in sessions)
                 {
-                    
-                    logger.Info($"Checking session ID: {session.SessionID}");
-
-                    bool isCurrentSession = _currentSessionIDs.Values.Any(value => value.Trim() == session.SessionID.Trim());
-                    foreach (var value in _currentSessionIDs.Values)
-                    {
-                        MessageBox.Show($"Comparing '{value.Trim()}' with '{session.SessionID.Trim()}'");
-                    }
+                    logger.Info($"Session ID: {session.SessionID}, IsCurrentSession: {session.IsCurrentSession}");
+                }
+                foreach (var session in sessions)
+                {
+                    // Uzyskaj ID aktualnej sesji
+                    string currentSessionId = _rClients[port].GetCurrentSession();
 
 
-                    if (isCurrentSession)
+                    // Sprawdź, czy ID sesji jest równe ID aktualnej sesji
+                    session.IsCurrentSession = session.SessionID.Trim().Equals(currentSessionId.Trim());
+
+                    if (session.IsCurrentSession)
                     {
                         session.IsCurrentSession = true;
                         logger.Info($"Session ID {session.SessionID} is current.");
                     }
                     else
                     {
-                        
-                        session.IsCurrentSession = true;
+                        session.IsCurrentSession = false;
                         logger.Info($"Session ID {session.SessionID} is not current.");
                     }
                 }
@@ -366,7 +342,7 @@ namespace ListaSessji01
 
                 dataGrid.ItemsSource = sessions;
 
-                // Restore selected session
+                // Przywróć wybraną sesję
                 if (_selectedSessionIDs.TryGetValue($"Port {port}", out string selectedSessionID))
                 {
                     foreach (var item in dataGrid.Items)
@@ -398,6 +374,9 @@ namespace ListaSessji01
             buttonFactory.SetValue(Button.CommandParameterProperty, new Binding("SessionID"));
             buttonFactory.AddHandler(Button.ClickEvent, new RoutedEventHandler(EndSessionButton_Click));
 
+            // Apply the style to the button
+            buttonFactory.SetValue(Button.StyleProperty, Application.Current.Resources["EndSessionButtonStyle"] as Style);
+
             var visibilityBinding = new Binding("IsCurrentSession")
             {
                 Converter = new BooleanToVisibilityConverter(),
@@ -409,8 +388,6 @@ namespace ListaSessji01
             template.VisualTree = stackPanelFactory;
             return template;
         }
-
-
 
         private void EndSessionButton_Click(object sender, RoutedEventArgs e)
         {
