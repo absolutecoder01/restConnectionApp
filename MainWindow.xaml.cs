@@ -61,8 +61,8 @@ namespace ListaSessji01
             }
             catch (Exception ex)
             {
-                logger.Error($"Error initializing session for port {port}: {ex.Message}");
-                MessageBox.Show($"Error initializing session for port {port}: {ex.Message}");
+                logger.Error($"Błąd inicjalizacji sesji dla portu {port}: {ex.Message}");
+                MessageBox.Show($"Błąd inicjalizacji sesji dla portu {port}: {ex.Message}");
             }
         }
 
@@ -74,8 +74,8 @@ namespace ListaSessji01
             }
             catch (Exception ex)
             {
-                logger.Error($"Error during closing: {ex.Message}");
-                MessageBox.Show($"Error during closing: {ex.Message}");
+                logger.Error($"Błąd podczas zamykania: {ex.Message}");
+                MessageBox.Show($"Błąd podczas zamykania: {ex.Message}");
             }
         }
         public class SessionData
@@ -106,24 +106,24 @@ namespace ListaSessji01
                                 }
                                 else
                                 {
-                                    logger.Warn($"Invalid SessionID format: {sessionId}");
-                                    MessageBox.Show($"Invalid SessionID format: {sessionId}");
+                                    logger.Warn($"Nieprawidłowy format SessionID: {sessionId}");
+                                    MessageBox.Show($"Nieprawidłowy format SessionID: {sessionId}");
                                 }
                             }
                         }
                     }
                     else
                     {
-                        logger.Warn("No session IDs found in the JSON response.");
+                        logger.Warn("Nie znaleziono identyfikatorów sesji w odpowiedzi JSON.");
                         //MessageBox.Show("No session IDs found in the JSON response.");
                     }
                 }
-                logger.Info("Current sessions have been closed.");
+                logger.Info("Bieżące sesje zostały zamknięte.");
             }
             catch (Exception ex)
             {
-                logger.Fatal("Error closing sessions: " + ex.Message);
-                MessageBox.Show("Error closing sessions: " + ex.Message);
+                logger.Fatal("Błąd podczas zamykania sesji: " + ex.Message);
+                MessageBox.Show("Błąd podczas zamykania sesji: " + ex.Message);
             }
         }
 
@@ -142,13 +142,13 @@ namespace ListaSessji01
         {
             try
             {
-                logger.Info($"Checking JSON: {json}");
+                logger.Info($"Sprawdzanie JSON: {json}");
                 JToken.Parse(json);
                 return true;
             }
             catch (JsonReaderException ex)
             {
-                logger.Warn($"Invalid JSON format: {json}. Error: {ex.Message}");
+                logger.Warn($"Nieprawidłowy format JSON: {json}. Error: {ex.Message}");
                 // MessageBox.Show($"Invalid JSON format: {json}. Error: {ex.Message}");
                 return false;
             }
@@ -168,8 +168,8 @@ namespace ListaSessji01
             }
             catch (Exception ex)
             {
-                logger.Error($"Error during timer tick: {ex.Message}");
-                MessageBox.Show($"Error during timer tick: {ex.Message}");
+                logger.Error($"Błąd podczas odliczania czasu: {ex.Message}");
+                MessageBox.Show($"Błąd podczas odliczania czasu: {ex.Message}");
             }
         }
 
@@ -187,8 +187,8 @@ namespace ListaSessji01
                 }
                 catch (Exception ex)
                 {
-                    logger.Error($"Error saving selected session for tab {tabItem.Header}: {ex.Message}");
-                    MessageBox.Show($"Error saving selected session for tab {tabItem.Header}: {ex.Message}");
+                    logger.Error($"Błąd podczas zapisywania wybranej sesji dla karty {tabItem.Header}: {ex.Message}");
+                    MessageBox.Show($"Błąd podczas zapisywania wybranej sesji dla karty {tabItem.Header}: {ex.Message}");
                 }
             }
 
@@ -201,8 +201,8 @@ namespace ListaSessji01
                 }
                 catch (Exception ex)
                 {
-                    logger.Error($"Error getting connection list for port {port}: {ex.Message}");
-                    MessageBox.Show($"Error getting connection list for port {port}: {ex.Message}");
+                    logger.Error($"Błąd podczas pobierania listy połączeń dla portu {port}: {ex.Message}");
+                    MessageBox.Show($"Błąd podczas pobierania listy połączeń dla portu {port}: {ex.Message}");
                 }
             }
 
@@ -226,8 +226,8 @@ namespace ListaSessji01
                 }
                 catch (Exception ex)
                 {
-                    logger.Error($"Error restoring selected session for tab {tabItem.Header}: {ex.Message}");
-                    MessageBox.Show($"Error restoring selected session for tab {tabItem.Header}: {ex.Message}");
+                    logger.Error($"Błąd podczas przywracania wybranej sesji dla karty {tabItem.Header}: {ex.Message}");
+                    MessageBox.Show($"Błąd podczas przywracania wybranej sesji dla karty {tabItem.Header}: {ex.Message}");
                 }
             }
         }
@@ -244,7 +244,7 @@ namespace ListaSessji01
             public int LifeDuration { get; set; }
             public int ExpiresIn { get; set; }
             public string SessionLifetime { get; set; }
-            public int ElapsedSinceLastActivity { get; set; }
+            public string ElapsedSinceLastActvity { get; set; }
             public string WorkOnPort { get; set; }
             public bool IsCurrentSession { get; set; }
         }
@@ -260,89 +260,109 @@ namespace ListaSessji01
             }
             catch (Exception ex)
             {
-                logger.Error($"Error parsing data: {ex.Message}");
-                MessageBox.Show($"Error parsing data: {ex.Message}");
+                logger.Error($"Błąd podczas analizowania danych: {ex.Message}");
+                MessageBox.Show($"Błąd podczas analizowania danych: {ex.Message}");
             }
         }
 
         private void DisplaySessionsAsTabs(List<Session> sessions, string port)
         {
             try
-
             {
                 foreach (var session in sessions)
                 {
                     logger.Info($"Session ID: {session.SessionID}, IsCurrentSession: {session.IsCurrentSession}");
                 }
+
+                string currentSessionId = _rClients[port].GetCurrentSession();
                 foreach (var session in sessions)
                 {
-                    // Uzyskaj ID aktualnej sesji
-                    string currentSessionId = _rClients[port].GetCurrentSession();
-
-
-                    // Sprawdź, czy ID sesji jest równe ID aktualnej sesji
                     session.IsCurrentSession = session.SessionID.Trim().Equals(currentSessionId.Trim());
-
-                    if (session.IsCurrentSession)
-                    {
-                        session.IsCurrentSession = true;
-                        logger.Info($"Session ID {session.SessionID} is current.");
-                    }
-                    else
-                    {
-                        session.IsCurrentSession = false;
-                        logger.Info($"Session ID {session.SessionID} is not current.");
-                    }
                 }
+
+                // Filter out the current session from the displayed sessions
+                var filteredSessions = sessions.Where(s => !s.IsCurrentSession).ToList();
 
                 var existingTabItem = SessionsTabControl.Items.Cast<TabItem>().FirstOrDefault(t => t.Header?.ToString() == $"Port {port}");
 
                 DataGrid dataGrid;
                 if (existingTabItem != null)
                 {
-                    dataGrid = (DataGrid)existingTabItem.Content;
-                    dataGrid.ItemsSource = null; // Oczyść stare przed dodaniem nowych
+                    // If the tab already exists, just update the data source
+                    dataGrid = (DataGrid)((Grid)existingTabItem.Content).Children[0]; // Get the DataGrid from the Grid
+                    dataGrid.ItemsSource = filteredSessions; // Update the ItemsSource directly
                 }
                 else
                 {
+                    // Create a new Grid instance
+                    var grid = new Grid();
+
+                    // Define row definitions
+                    grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) }); // DataGrid row
+                    grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto }); // Button row
+
+                    // Create a new DataGrid instance
                     dataGrid = new DataGrid
                     {
                         AutoGenerateColumns = false,
-                        IsReadOnly = true
+                        IsReadOnly = true,
                     };
 
-                    dataGrid.Columns.Add(new DataGridTextColumn { Header = "SessionID", Binding = new Binding("SessionID") });
-                    dataGrid.Columns.Add(new DataGridTextColumn { Header = "Protocol", Binding = new Binding("Protocol") });
-                    dataGrid.Columns.Add(new DataGridTextColumn { Header = "ClientIP", Binding = new Binding("ClientIP") });
-                    dataGrid.Columns.Add(new DataGridTextColumn { Header = "User", Binding = new Binding("User") });
-                    dataGrid.Columns.Add(new DataGridTextColumn { Header = "CreatedOn", Binding = new Binding("CreatedOn") });
+                    // Define columns
+                    dataGrid.Columns.Add(new DataGridTextColumn { Header = "Id Sesji", Binding = new Binding("SessionID") });
+                    dataGrid.Columns.Add(new DataGridTextColumn { Header = "Protokół", Binding = new Binding("Protocol") });
+                    dataGrid.Columns.Add(new DataGridTextColumn { Header = "IP", Binding = new Binding("ClientIP") });
+                    dataGrid.Columns.Add(new DataGridTextColumn { Header = "Użytkownik", Binding = new Binding("User  ") });
+                    dataGrid.Columns.Add(new DataGridTextColumn { Header = "Rozpoczęcie sesji", Binding = new Binding("CreatedOn") });
                     dataGrid.Columns.Add(new DataGridTextColumn { Header = "ExtraData", Binding = new Binding("ExtraData") });
                     dataGrid.Columns.Add(new DataGridTextColumn { Header = "Status", Binding = new Binding("Status") });
-                    dataGrid.Columns.Add(new DataGridTextColumn { Header = "LifeDuration", Binding = new Binding("LifeDuration") });
-                    dataGrid.Columns.Add(new DataGridTextColumn { Header = "ExpiresIn", Binding = new Binding("ExpiresIn") });
-                    dataGrid.Columns.Add(new DataGridTextColumn { Header = "SessionLifetime", Binding = new Binding("SessionLifetime") });
-                    dataGrid.Columns.Add(new DataGridTextColumn { Header = "ElapsedSinceLastActivity", Binding = new Binding("ElapsedSinceLastActivity") });
-                    dataGrid.Columns.Add(new DataGridTextColumn { Header = "WorkOnPort", Binding = new Binding("WorkOnPort") });
+                    dataGrid.Columns.Add(new DataGridTextColumn { Header = "Długość sesji", Binding = new Binding("LifeDuration") });
+                    dataGrid.Columns.Add(new DataGridTextColumn { Header = "Wygasa za", Binding = new Binding("ExpiresIn") });
+                    dataGrid.Columns.Add(new DataGridTextColumn { Header = "Długość życia sesji", Binding = new Binding("SessionLifetime") });
+                    dataGrid.Columns.Add(new DataGridTextColumn
+                    {
+                        Header = "Brak Aktywności",
+                        Binding = new Binding("ElapsedSinceLastActvity") // Ensure this matches the property name
+                    });
+                    dataGrid.Columns.Add(new DataGridTextColumn { Header = "Port", Binding = new Binding("WorkOnPort") });
 
+                    // Create a DataGridTemplateColumn for the End Session button
                     DataGridTemplateColumn endSessionColumn = new DataGridTemplateColumn
                     {
-                        Header = "Action",
+                        Header = "Akcja",
                         CellTemplate = CreateEndSessionButtonTemplate()
                     };
-
                     dataGrid.Columns.Add(endSessionColumn);
 
+                    // Add the DataGrid to the first row of the Grid
+                    Grid.SetRow(dataGrid, 0);
+                    grid.Children.Add(dataGrid);
+
+                    // Create the End All Sessions button
+                    Button endAllSessionsButton = new Button
+                    {
+                        Content = "Zakończ wszystkie sesje",
+                        Style = Application.Current.Resources["EndAllSessionsButtonStyle"] as Style // Optional: Define a style in XAML
+                    };
+                    endAllSessionsButton.Click += (s, e) => EndAllSessionsForPort(port);
+
+                    // Add the button to the second row of the Grid
+                    Grid.SetRow(endAllSessionsButton, 1);
+                    grid.Children.Add(endAllSessionsButton);
+
+                    // Create a new TabItem
                     var tabItem = new TabItem
                     {
                         Header = $"Port {port}",
-                        Content = dataGrid
+                        Content = grid
                     };
                     SessionsTabControl.Items.Add(tabItem);
                 }
 
-                dataGrid.ItemsSource = sessions;
+                // Set the ItemsSource for the DataGrid
+                dataGrid.ItemsSource = filteredSessions;
 
-                // Przywróć wybraną sesję
+                // Restore selected session if applicable
                 if (_selectedSessionIDs.TryGetValue($"Port {port}", out string selectedSessionID))
                 {
                     foreach (var item in dataGrid.Items)
@@ -358,19 +378,53 @@ namespace ListaSessji01
             }
             catch (Exception ex)
             {
-                logger.Error($"Error displaying sessions for port {port}: {ex.Message}");
-                MessageBox.Show($"Error displaying sessions for port {port}: {ex.Message}");
+                logger.Error($"Błąd wyświetlania sesji dla portu {port}: {ex.Message}");
+                MessageBox.Show($"Błąd wyświetlania sesji dla portu {port}: {ex.Message}");
             }
         }
+        private void EndAllSessionsForPort(string port)
+        {
+            try
+            {
+                var rClient = _rClients[port];
+                string currentSessionId = rClient.GetCurrentSession(); // Get the current session ID
+                var sessionIDs = ExtractSessionIDs(rClient.GetConnectionList()); // Get all session IDs
 
+                // Iterate through all session IDs and close them, except for the current session
+                foreach (var sessionId in sessionIDs)
+                {
+                    if (!string.IsNullOrEmpty(sessionId) && sessionId != currentSessionId) // Skip the current session
+                    {
+                        if (IsValidSessionID(sessionId))
+                        {
+                            rClient.CloseSession(sessionId);
+                        }
+                        else
+                        {
+                            logger.Warn($"Nieprawidłowy format SessionID: {sessionId}");
+                            MessageBox.Show($"Nieprawidłowy format SessionID {sessionId}");
+                        }
+                    }
+                }
+
+                // Refresh the session list to reflect the changes
+                RefreshSessionList();
+                MessageBox.Show($"Wszystkie sesje dla portu {port} zostały zamknięte, z wyjątkiem sesji bieżącej.");
+            }
+            catch (Exception ex)
+            {
+                logger.Error($"Błąd podczas kończenia wszystkich sesji dla portu {port}: {ex.Message}");
+                MessageBox.Show($"Błąd podczas kończenia wszystkich sesji dla portu {port}: {ex.Message}");
+            }
+        }
         private DataTemplate CreateEndSessionButtonTemplate()
         {
             var template = new DataTemplate();
             var stackPanelFactory = new FrameworkElementFactory(typeof(StackPanel));
             stackPanelFactory.SetValue(StackPanel.OrientationProperty, Orientation.Horizontal);
 
-            var buttonFactory = new FrameworkElementFactory(typeof(Button));
-            buttonFactory.SetValue(Button.ContentProperty, "End Session");
+            var buttonFactory = new FrameworkElementFactory(typeof(System.Windows.Controls.Button)); // Specify WPF Button
+            buttonFactory.SetValue(Button.ContentProperty, "Zakończ sesję");
             buttonFactory.SetValue(Button.CommandParameterProperty, new Binding("SessionID"));
             buttonFactory.AddHandler(Button.ClickEvent, new RoutedEventHandler(EndSessionButton_Click));
 
@@ -401,20 +455,20 @@ namespace ListaSessji01
                     }
                     else
                     {
-                        logger.Warn("Attempt to close own session was blocked.");
-                        MessageBox.Show("Attempt to close own session was blocked.");
+                        logger.Warn("Próba zamknięcia własnej sesji została zablokowana.");
+                        MessageBox.Show("Próba zamknięcia własnej sesji została zablokowana.");
                     }
                 }
                 else
                 {
-                    logger.Error("Error ending session.");
-                    MessageBox.Show("Error ending session.");
+                    logger.Error("Błąd podczas kończenia sesji.");
+                    MessageBox.Show("Błąd podczas kończenia sesji.");
                 }
             }
             catch (Exception ex)
             {
-                logger.Error($"Error ending session: {ex.Message}");
-                MessageBox.Show($"Error ending session: {ex.Message}");
+                logger.Error($"Błąd podczas kończenia sesji: {ex.Message}");
+                MessageBox.Show($"Błąd podczas kończenia sesji: {ex.Message}");
             }
         }
 
@@ -430,8 +484,8 @@ namespace ListaSessji01
             }
             catch (Exception ex)
             {
-                logger.Error($"Error ending session {sessionId}: " + ex.Message);
-                MessageBox.Show($"Error ending session {sessionId}: " + ex.Message);
+                logger.Error($"Błąd podczas kończenia sesji {sessionId}: " + ex.Message);
+                MessageBox.Show($"Błąd podczas kończenia sesji {sessionId}: " + ex.Message);
             }
         }
     }

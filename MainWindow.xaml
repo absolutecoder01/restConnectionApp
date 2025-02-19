@@ -7,8 +7,22 @@
         mc:Ignorable="d"
         Closing="MainWindow_Closing"
         WindowStartupLocation="CenterScreen"
-        Title="MainWindow" Height="550" Width="1096">
+        Title="Lista Sesji WP" Height="550" Width="1044">
     <Window.Resources>
+
+        <Style x:Key="EndAllSessionsButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Red"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+        <Style x:Key="HideCurrentSessionRowStyle" TargetType="DataGridRow">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsCurrentSession}" Value="True">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <Style x:Key="EndSessionButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="#FFDD4C4C"/>
