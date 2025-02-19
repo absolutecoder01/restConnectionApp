@@ -1,0 +1,56 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\volodymyr.kupak\\source\\repos\\ListaSessji01\\ListaSessji01\\ListaSessji01.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\volodymyr.kupak\\source\\repos\\ListaSessji01\\ListaSessji01\\ListaSessji01.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\volodymyr.kupak\\source\\repos\\ListaSessji01\\ListaSessji01\\ListaSessji01.csproj",
+        "projectName": "ListaSessji01",
+        "projectPath": "C:\\Users\\volodymyr.kupak\\source\\repos\\ListaSessji01\\ListaSessji01\\ListaSessji01.csproj",
+        "packagesPath": "C:\\Users\\volodymyr.kupak\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\volodymyr.kupak\\source\\repos\\ListaSessji01\\ListaSessji01\\obj\\",
+        "projectStyle": "PackageReference",
+        "skipContentFileWrite": true,
+        "UsingMicrosoftNETSdk": false,
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\volodymyr.kupak\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net46"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net46": {
+            "projectReferences": {}
+          }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net46": {
+          "dependencies": {
+            "Costura.Fody": {
+              "target": "Package",
+              "version": "[5.0.0, )"
+            }
+          }
+        }
+      }
+    }
+  }
+}
