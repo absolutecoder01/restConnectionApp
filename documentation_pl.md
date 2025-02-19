@@ -634,11 +634,11 @@ public class RClient
 
 <hr/>
 
-## Link for original version
+## Link do oryginalnej wersji
 
-Original documentation is avaible [here](README.md).
+Oryginalna wersja dokumentacji jest dostępna [tutaj](README.md).
 
 
-## Author
+## Autor
 
 Aplikację opracował [absolutecoder01](https://github.com/absolutecoder01)
